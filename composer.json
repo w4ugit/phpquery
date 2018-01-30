@@ -7,16 +7,19 @@
     ,"homepage": "http://code.google.com/p/phpquery/"
     ,"license": "MIT"
     ,"authors": [
-        {
+
+         {
+             "name": "didier Belot"
+             ,"role": "Packager"
+             ,"homepage": "https://github.com/electrolinux/phpquery"
+        }
+        ,{
             "name": "Tobiasz Cudnik"
             ,"email": "tobiasz.cudnik@gmail.com"
             ,"homepage": "https://github.com/TobiaszCudnik"
             ,"role": "Developer"
         }
-        ,{
-            "name": "didier Belot"
-            ,"role": "Packager"
-        }
+
     ],
     "autoload": {
         "classmap": ["phpQuery/"]
