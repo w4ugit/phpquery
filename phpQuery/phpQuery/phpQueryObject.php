@@ -967,16 +967,18 @@ class phpQueryObject
 			break;
 			case 'parent':
 				$this->elements = $this->map(
-					create_function('$node', '
+					function ($node) {
 						return $node instanceof DOMELEMENT && $node->childNodes->length
-							? $node : null;')
+							? $node : null;
+					}
 				)->elements;
 			break;
 			case 'empty':
 				$this->elements = $this->map(
-					create_function('$node', '
+					function ($node) {
 						return $node instanceof DOMELEMENT && $node->childNodes->length
-							? null : $node;')
+							? null : $node;
+					}
 				)->elements;
 			break;
 			case 'disabled':
@@ -989,19 +991,21 @@ class phpQueryObject
 			break;
 			case 'enabled':
 				$this->elements = $this->map(
-					create_function('$node', '
-						return pq($node)->not(":disabled") ? $node : null;')
+					function ($node) {
+						return pq($node)->not(":disabled") ? $node : null;
+					}
 				)->elements;
 			break;
 			case 'header':
 				$this->elements = $this->map(
-					create_function('$node',
-						'$isHeader = isset($node->tagName) && in_array($node->tagName, array(
+					function ($node) {
+						$isHeader = isset($node->tagName) && in_array($node->tagName, array(
 							"h1", "h2", "h3", "h4", "h5", "h6", "h7"
 						));
 						return $isHeader
 							? $node
-							: null;')
+							: null;
+					}
 				)->elements;
 //				$this->elements = $this->map(
 //					create_function('$node', '$node = pq($node);
@@ -1018,18 +1022,19 @@ class phpQueryObject
 			break;
 			case 'only-child':
 				$this->elements = $this->map(
-					create_function('$node',
-						'return pq($node)->siblings()->size() == 0 ? $node : null;')
+					function ($node) {
+						return pq($node)->siblings()->size() == 0 ? $node : null;
+					}
 				)->elements;
 			break;
 			case 'first-child':
 				$this->elements = $this->map(
-					create_function('$node', 'return pq($node)->prevAll()->size() == 0 ? $node : null;')
+					function ($node) { return pq($node)->prevAll()->size() == 0 ? $node : null; }
 				)->elements;
 			break;
 			case 'last-child':
 				$this->elements = $this->map(
-					create_function('$node', 'return pq($node)->nextAll()->size() == 0 ? $node : null;')
+					function ($node) { return pq($node)->nextAll()->size() == 0 ? $node : null; }
 				)->elements;
 			break;
 			case 'nth-child':
@@ -1042,21 +1047,22 @@ class phpQueryObject
 				// :nth-child(index/even/odd/equation)
 				if ($param == 'even' || $param == 'odd')
 					$mapped = $this->map(
-						create_function('$node, $param',
-							'$index = pq($node)->prevAll()->size()+1;
+						function ($node, $param) {
+							$index = pq($node)->prevAll()->size()+1;
 							if ($param == "even" && ($index%2) == 0)
 								return $node;
 							else if ($param == "odd" && $index%2 == 1)
 								return $node;
 							else
-								return null;'),
+								return null;
+						},
 						new CallbackParam(), $param
 					);
 				else if (mb_strlen($param) > 1 && preg_match('/^(\d*)n([-+]?)(\d*)/', $param) === 1)
 					// an+b
 					$mapped = $this->map(
-						create_function('$node, $param',
-							'$prevs = pq($node)->prevAll()->size();
+						function ($node, $param) {
+							$prevs = pq($node)->prevAll()->size();
 							$index = 1+$prevs;
 
 							preg_match("/^(\d*)n([-+]?)(\d*)/", $param, $matches);
@@ -1091,20 +1097,21 @@ class phpQueryObject
 //								return ($index-$b)%$a == 0
 //									? $node
 //									: null;
-							'),
+							},
 						new CallbackParam(), $param
 					);
 				else
 					// index
 					$mapped = $this->map(
-						create_function('$node, $index',
-							'$prevs = pq($node)->prevAll()->size();
+						function ($node, $index) {
+							$prevs = pq($node)->prevAll()->size();
 							if ($prevs && $prevs == $index-1)
 								return $node;
 							else if (! $prevs && $index == 1)
 								return $node;
 							else
-								return null;'),
+								return null;
+						},
 						new CallbackParam(), $param
 					);
 				$this->elements = $mapped->elements;
@@ -1880,7 +1887,7 @@ class phpQueryObject
 	}
 	/**
 	 * Enter description here...
-	 * 
+	 *
 	 * @param $code
 	 * @return unknown_type
 	 */
@@ -1891,7 +1898,7 @@ class phpQueryObject
 	}
 	/**
 	 * Enter description here...
-	 * 
+	 *
 	 * @param $code
 	 * @return unknown_type
 	 */
@@ -2266,7 +2273,7 @@ class phpQueryObject
 		}
 		return $return;
 	}
-	
+
 	/**
 	 * @return The text content of each matching element, like
 	 * text() but returns an array with one entry per matched element.
@@ -2279,7 +2286,7 @@ class phpQueryObject
 		}
 		return $results;
 	}
-	
+
 	/**
 	 * Enter description here...
 	 *
@@ -2647,7 +2654,7 @@ class phpQueryObject
 		return is_null($value)
 			? '' : $this;
 	}
-	
+
 	/**
 	 * @return The same attribute of each matching element, like
 	 * attr() but returns an array with one entry per matched element.
@@ -2951,7 +2958,7 @@ class phpQueryObject
 	}
 	/**
 	 * Enter description here...
-	 * 
+	 *
 	 * @param <type> $key
 	 * @param <type> $value
 	 */
@@ -2968,7 +2975,7 @@ class phpQueryObject
 	}
 	/**
 	 * Enter description here...
-	 * 
+	 *
 	 * @param <type> $key
 	 */
 	public function removeData($key) {
