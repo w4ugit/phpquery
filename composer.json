@@ -10,7 +10,7 @@
 
          {
              "name": "didier Belot"
-             ,"role": "Packager"
+             ,"role": "Packager, maintainer"
              ,"homepage": "https://github.com/electrolinux/phpquery"
         }
         ,{
@@ -21,6 +21,10 @@
         }
 
     ],
+    "require": {
+        "php": ">=5.3.0"
+    },
+
     "autoload": {
         "classmap": ["phpQuery/"]
     }
